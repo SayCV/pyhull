@@ -7,7 +7,7 @@ from setuptools import setup, Extension, find_packages
 src_dir = "src"
 include_dirs = glob.glob(os.path.join("src", "libqhull"))
 sources = glob.glob(os.path.join("src", "libqhull", "*.c"))
-if sys.platform.strip() == "darwin":
+if sys.platform.strip() == "darwin" or sys.platform.strip() == "win32":
     include_dirs += glob.glob(os.path.join("src", "fmemopen"))
     sources += glob.glob(os.path.join("src", "fmemopen", "*.c"))
 extension = Extension('pyhull._pyhull',

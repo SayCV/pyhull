@@ -55,9 +55,13 @@ int isatty(int);  /* returns 1 if stdin is a tty
 #endif
 
 /* Use simulated fmemopen and open_memstream for Mac systems.*/
-#if (defined(BSD) || __APPLE__)
+#if (defined(BSD) || __APPLE__ || __WIN32)
 #include "fmemopen.h"
 #include "open_memstream.h"
+#endif
+
+#if defined(_WIN32)
+#define strtok_r(a,b,c) strtok_s(a,b,c)
 #endif
 
 char hidden_options[]=" d v H Qbb Qf Qg Qm Qr Qu Qv Qx Qz TR E V Fp Gt Q0 Q1 Q2 Q3 Q4 Q5 Q6 Q7 Q8 Q9 ";
@@ -450,7 +454,12 @@ __attribute__((visibility("default"))) PyMODINIT_FUNC PyInit__pyhull(void)
 #else
 #define INITERROR return
 
+#if defined(_WIN32)
+__declspec(dllexport) void init_pyhull(void)
+#else
 __attribute__((visibility("default"))) void init_pyhull(void)
+#endif
+
 #endif
 {
 #if PY_MAJOR_VERSION >= 3

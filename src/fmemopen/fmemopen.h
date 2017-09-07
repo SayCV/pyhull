@@ -1,5 +1,5 @@
 //
-// Copyright 2012 Jeff Verkoeyen
+// Copyright 2011-2014 NimbusKit
 // Originally ported from https://github.com/ingenuitas/python-tesseract/blob/master/fmemopen.c
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,11 +18,11 @@
 #ifndef FMEMOPEN_H_
 #define FMEMOPEN_H_
 
-#ifdef __cplusplus
-extern "C"
-{
+#if defined __cplusplus
+extern "C" {
 #endif
-
+    
+#if defined(__APPLE__)
 /**
  * A BSD port of the fmemopen Linux method using funopen.
  *
@@ -36,17 +36,29 @@ extern "C"
  *
  * You must call fclose on the returned file pointer or memory will be leaked.
  *
- *      @param buf The data that will be used to back the FILE* methods. Must be at least
- *                 @c size bytes.
- *      @param size The size of the @c buf data.
- *      @param mode The permitted stream operation modes.
- *      @returns A pointer that can be used in the fread/fwrite/fseek/fclose family of methods.
- *               If a failure occurred NULL will be returned.
+ * @param buf The data that will be used to back the FILE* methods. Must be at least
+ *            @c size bytes.
+ * @param size The size of the @c buf data.
+ * @param mode The permitted stream operation modes.
+ * @return A pointer that can be used in the fread/fwrite/fseek/fclose family of methods.
+ *         If a failure occurred NULL will be returned.
+ * @ingroup NimbusMemoryMappping
  */
 FILE *fmemopen(void *buf, size_t size, const char *mode);
 
 #ifdef __cplusplus
 }
+#endif
+
+#elif defined(_WIN32)
+
+/**
+ * Code based on GPL code from https://github.com/sightmachine/python-tesseract/blob/master/util-fmemopen.h
+ *
+ * \author Pablo Rincon Crespo <pablo.rincon.crespo@gmail.com>
+ *         Based on FMem.c of Alexandre Flori (2008/10/17 AF)
+ */
+FILE *fmemopen(void *, size_t, const char *);
 #endif
 
 #endif // #ifndef FMEMOPEN_H_
